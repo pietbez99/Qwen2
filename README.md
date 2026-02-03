@@ -114,3 +114,4 @@ Confidence threshold: 80%
 - **Inference Time**: 3-8 seconds
 # Build trigger Tue Feb  3 10:32:11 SAST 2026
 # Build trigger Tue Feb  3 12:02:34 SAST 2026
+# Force rebuild 2026-02-03-12:55:37

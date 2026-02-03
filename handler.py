@@ -25,13 +25,20 @@ def load_model():
     global model, processor
 
     print("Loading Qwen2-VL-7B-Instruct model...")
+    print(f"PyTorch version: {torch.__version__}")
+    print(f"CUDA available: {torch.cuda.is_available()}")
 
+    # Load with better error handling and compatibility
     model = Qwen2VLForConditionalGeneration.from_pretrained(
         "Qwen/Qwen2-VL-7B-Instruct",
         torch_dtype=torch.bfloat16,
         device_map="auto",
-        attn_implementation="eager"  # Use eager attention (flash_attention_2 requires separate install)
+        attn_implementation="eager",  # Use eager attention (flash_attention_2 requires separate install)
+        low_cpu_mem_usage=True
     )
+
+    # Disable autocast if it causes issues
+    model.config.torch_dtype = torch.bfloat16
 
     processor = AutoProcessor.from_pretrained(
         "Qwen/Qwen2-VL-7B-Instruct",
@@ -40,6 +47,7 @@ def load_model():
     )
 
     print("Model loaded successfully!")
+    print(f"Model device: {model.device}")
 
 def download_image(url):
     """Download image from URL and return PIL Image"""
@@ -313,13 +321,15 @@ def handler(job):
         inputs = inputs.to(model.device)
 
         # Generate response
+        # Disable autocast to avoid PyTorch compatibility issues
         with torch.no_grad():
-            generated_ids = model.generate(
-                **inputs,
-                max_new_tokens=512,
-                temperature=0.3,
-                do_sample=True
-            )
+            with torch.amp.autocast('cuda', enabled=False):
+                generated_ids = model.generate(
+                    **inputs,
+                    max_new_tokens=512,
+                    temperature=0.3,
+                    do_sample=True
+                )
 
         # Decode response
         generated_ids_trimmed = [

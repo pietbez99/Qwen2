@@ -112,3 +112,4 @@ Confidence threshold: 80%
 - **License**: Apache 2.0
 - **VRAM**: ~14-16GB (BF16)
 - **Inference Time**: 3-8 seconds
+# Build trigger Tue Feb  3 10:32:11 SAST 2026

@@ -30,7 +30,7 @@ def load_model():
         "Qwen/Qwen2-VL-7B-Instruct",
         torch_dtype=torch.bfloat16,
         device_map="auto",
-        attn_implementation="flash_attention_2"
+        attn_implementation="eager"  # Use eager attention (flash_attention_2 requires separate install)
     )
 
     processor = AutoProcessor.from_pretrained(

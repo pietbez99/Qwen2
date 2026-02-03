@@ -113,3 +113,4 @@ Confidence threshold: 80%
 - **VRAM**: ~14-16GB (BF16)
 - **Inference Time**: 3-8 seconds
 # Build trigger Tue Feb  3 10:32:11 SAST 2026
+# Build trigger Tue Feb  3 12:02:34 SAST 2026
